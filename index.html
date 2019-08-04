@@ -27,6 +27,7 @@
     <div id="disneyGifs"></div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script type="text/javascript">
+
         $("button").on("click", function () {
             let disneyMovies = $(this).attr("disney");
             let gifKey = "MXM9Owjwe8y0ICpm3m8r8TyAxqTL7bfU";
@@ -45,9 +46,9 @@
                     let p = $("<p>").text(`Ratings ${results[i].rating}`);
                     let disneyImage = $("<img>")
                     disneyImage.attr("src", animateURL)
-                    disneyImage.attr("data-still", stillURL)
-                    disneyImage.attr("data-animate", animateURL)
-                    disneyImage.attr("data-state", "animate")
+                    disneyImage.attr("still", stillURL)
+                    disneyImage.attr("animate", animateURL)
+                    disneyImage.attr("state", "animate")
                     disneyImage.addClass("toggler")
                     disneyDiv.append(p)
                     disneyDiv.append(disneyImage)
@@ -57,18 +58,18 @@
             })
         })
         function gifToggler() {
-            let state = $(this).attr("data-state");
-            let animate = $(this).attr("data-animate");
-            let still = $(this).attr("data-still");
+            let state = $(this).attr("state");
+            let animate = $(this).attr("animate");
+            let still = $(this).attr("still");
             
             if (state == "animate") {
                 $(this).attr("src", still)
-                $(this).attr("data-state", "still")
+                $(this).attr("state", "still")
             }
             
             else {
                 $(this).attr("src", animate)
-                $(this).attr("data-state", "animate")
+                $(this).attr("state", "animate")
             }
         }
         $(document).on("click", ".toggler", gifToggler)
