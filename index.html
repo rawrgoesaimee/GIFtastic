@@ -1,54 +1,78 @@
 <!DOCTYPE html>
 <html lang="en">
+​
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>GIFtastic Disney Gifs</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel="stylesheet" text="type/css" href="style.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+ <link rel="stylesheet" text="type/css" href="style.css">
 </head>
+​
 <body>
-    
+​
     <div class="jumbotron jumbotron-fluid">
         <div class="container">
-          <h1 class="display-4">GIFtastic Disney Gifs!!!</h1>
-          <button disney="thelionking">The Lion King</button>
-          <button disney="beautyandthebeast">Beauty and the Beast</button>
-          <button disney="aladdin">Aladdin</button>
-          <button disney="thelittlemermaid">The Little Mermaid</button>
-          <button disney="mulan">Mulan</button>
-      </div>
+            <h1 class="display-4">GIFtastic Disney Gifs!!!</h1>
+            <button disney="thelionking">The Lion King</button>
+            <button disney="beautyandthebeast">Beauty and the Beast</button>
+            <button disney="aladdin">Aladdin</button>
+            <button disney="thelittlemermaid">The Little Mermaid</button>
+            <button disney="mulan">Mulan</button>
+        </div>
     </div>
-
+    ​
     <div id="disneyGifs"></div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <script type="text/javascript">
+    <script type="text/javascript">
+        $("button").on("click", function () {
+            let disneyMovies = $(this).attr("disney");
+            let gifKey = "MXM9Owjwe8y0ICpm3m8r8TyAxqTL7bfU";
+            let queryUrl = `https://api.giphy.com/v1/gifs/search?q=${disneyMovies}&api_key=${gifKey}&limit=10`;
+            $("#disneyGifs").empty();
+            $.ajax({
+                url: queryUrl,
+                method: "GET"
+            }).then(function (response) {
+                let results = response.data
 
-    $("button").on("click", function(){
-      let disneyMovies = $(this).attr("disney");
-      let gifKey = "MXM9Owjwe8y0ICpm3m8r8TyAxqTL7bfU";
-      let queryUrl = `https://api.giphy.com/v1/gifs/search?q=${disneyMovies}&api_key=${gifKey}&limit=10`;
-      $("#disneyGifs").empty();
-      $.ajax({
-        url: queryUrl,
-        method:"GET"
-      }).then(function(response){
-        console.log(queryUrl);
-        let results = response.data;
-
-        for(let index = 0; index < results.length; index++){
-          let disneyDiv = $(`<div class="jumbotron container">`);
-          let p = $("<p>").text(`Ratings ${results[index].rating}`);
-          let disneyImage = $("<img>").attr("src", results[index].images.fixed_height.url)
-          disneyDiv.append(p)
-          disneyDiv.append(disneyImage)
-          console.log(disneyDiv)
-          $("#disneyGifs").append(disneyDiv);
+                for (let i = 0; i < results.length; i++) {
+                    let animateURL = response.data[i].images.downsized.url
+                    let stillURL = response.data[i].images.downsized_still.url
+                    let disneyDiv = $(`<div class="jumbotron container">`);
+                    let p = $("<p>").text(`Ratings ${results[i].rating}`);
+                    let disneyImage = $("<img>")
+                    disneyImage.attr("src", animateURL)
+                    disneyImage.attr("data-still", stillURL)
+                    disneyImage.attr("data-animate", animateURL)
+                    disneyImage.attr("data-state", "animate")
+                    disneyImage.addClass("toggler")
+                    disneyDiv.append(p)
+                    disneyDiv.append(disneyImage)
+                    //console.log(disneyDiv)
+                    $("#disneyGifs").append(disneyDiv);
+                }
+            })
+        })
+        function gifToggler() {
+            let state = $(this).attr("data-state");
+            let animate = $(this).attr("data-animate");
+            let still = $(this).attr("data-still");
+            
+            if (state == "animate") {
+                $(this).attr("src", still)
+                $(this).attr("data-state", "still")
+            }
+            
+            else {
+                $(this).attr("src", animate)
+                $(this).attr("data-state", "animate")
+            }
         }
-      })
-    })
-  </script>
-  <script src = "keys.js"></script>
+        $(document).on("click", ".toggler", gifToggler)
+    </script>
 </body>
+​
 </html>
