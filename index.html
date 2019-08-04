@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>GIFtastic Disney Gifs</title>
+</head>
+<body>
+    <button disney="thelionking">The Lion King</button>
+    <button disney="beautyandthebeast">Beauty and the Beast</button>
+    <button disney="aladdin">Aladdin</button>
+    <button disney="thelittlemermaid">The Little Mermaid</button>
+    <button disney="mulan">Mulan</button>
+
+    <div id="disneyGifs"></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script type="text/javascript">
+    $("button").on("click", function(){
+      let disneyMovies = $(this).attr("disney");
+      let queryUrl = `https://api.giphy.com/v1/gifs/search?q=${disneyMovies}&api_key=${gifKey}&limit=10`;
+      $.ajax({
+        url: queryUrl,
+        method:"GET"
+      }).then(function(response){
+        console.log(queryUrl);
+        let results = response.data;
+
+        for(let index = 0; index < results.length; index++){
+          let disneyDiv = $("<div>");
+          let p = $("<p>").text(`Ratings ${results[index].rating}`);
+          let disneyImage = $("<img>").attr("src", results[index].images.fixed_height.url)
+          disneyDiv.append(p)
+          disneyDiv.append(disneyImage)
+          console.log(disneyDiv)
+          $("#disneyGifs").prepend(disneyDiv);
+        }
+      })
+    })
+  </script>
+  <script src = "keys.js"></script>
+</body>
+</html>
