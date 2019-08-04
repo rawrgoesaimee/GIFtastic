@@ -27,6 +27,7 @@
 
     $("button").on("click", function(){
       let disneyMovies = $(this).attr("disney");
+      let gifKey = "MXM9Owjwe8y0ICpm3m8r8TyAxqTL7bfU";
       let queryUrl = `https://api.giphy.com/v1/gifs/search?q=${disneyMovies}&api_key=${gifKey}&limit=10`;
       $("#disneyGifs").empty();
       $.ajax({
